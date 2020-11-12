@@ -36,7 +36,7 @@ jobs:
       - run: echo ${{ steps.cache-r-packages.outputs.cache-hit }}
       
       - name: setup
-        if: jobs.build.steps.cache-r-packages.outputs.cache-hit != 'true'
+        if: steps.cache-r-packages.outputs.cache-hit != 'true'
         run: make setup
       
       - run: make build
