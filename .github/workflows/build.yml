@@ -20,20 +20,20 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: check out
+      - name: check-out
         uses: actions/checkout@v2
     
-      - name: install R
+      - name: install-r
         uses: r-lib/actions/setup-r@v1
   
-      - name: install pandoc
+      - name: install-pandoc
         uses: r-lib/actions/setup-pandoc@v1
       
-      - name: cache R packages
+      - name: cache-r-packages
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ steps.install R.outputs.installed-r-version }}-${{ hashFiles('.binder/*') }}
+          key: ${{ runner.os }}-${{ steps.install-r.outputs.installed-r-version }}-${{ hashFiles('.binder/*') }}
       
       - run: make setup
       
