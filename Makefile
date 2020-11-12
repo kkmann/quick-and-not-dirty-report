@@ -1,5 +1,5 @@
 build:
-	mkdir .build
+	mkdir -p .build
 	Rscript -e 'rmarkdown::render("rmarkdown/page.Rmd", output_dir = ".build")'
 
 setup:
