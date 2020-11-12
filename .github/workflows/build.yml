@@ -35,8 +35,9 @@ jobs:
           done < <(Rscript -e 'install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
       
       - name: update-binder-apt-dependencies
+        if: github.event_name == 'push'
         run: |
-          Rscript -e 'writeLines(gsub("^apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04"), perl = TRUE))' >> apt.txt
+          Rscript -e 'writeLines(gsub("^apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04"), perl = TRUE))' > apt.txt
           git config user.email "<>"
           git config user.name "GitHub runner"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
