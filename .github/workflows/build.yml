@@ -35,7 +35,7 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'options(repos = c(CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", Sys.getenv("MRAN_DATE")))); install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+          done < <(Rscript -e 'options(repos = c(CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", Sys.getenv("MRAN_DATE")))); install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04", path = "dependencies"))')
       
       - name: update-binder-specification
         if: github.event_name == 'push'
