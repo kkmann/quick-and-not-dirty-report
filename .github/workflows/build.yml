@@ -34,7 +34,7 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
       
-      - name: update-binder-apt-dependencies
+      - name: update-binder-specification
         if: github.event_name == 'push'
         run: |
           Rscript -e 'writeLines(gsub("^apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04"), perl = TRUE))' > apt.txt
@@ -53,6 +53,12 @@ jobs:
           
       - name: setup-packages
         run: |
+          con <- file("runtime.txt"); str <- readLines(con, 1); close(con)
+          tmp <- regexpr("[0-9]{4}-[0-9]{2}-[0-9]{2}", str)
+          mran_date <- substr(str, start = tmp, stop = tmp + attr(tmp, "match.length"))
+          options(repos = c( 
+            CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", mran_date)
+          ))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       
