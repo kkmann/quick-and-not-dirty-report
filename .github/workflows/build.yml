@@ -35,12 +35,12 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'options(repos = c(CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", Sys.getenv("MRAN_DATE")))); install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+          done < <(Rscript -e 'options(repos = c(CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", Sys.getenv("MRAN_DATE")))); install.packages(c("here", "remotes")); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
       
       - name: update-binder-specification
         if: github.event_name == 'push'
         run: |
-          Rscript -e 'writeLines(gsub("^apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04"), perl = TRUE))' > .binder/apt.txt
+          Rscript -e 'writeLines(gsub("^apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04", path = here::here("dependencies")), perl = TRUE))' > .binder/apt.txt
           Rscript -e 'writeLines(sprintf("r-%s-%s", Sys.getenv("R_VERSION_BINDER", unset = "3.6"), Sys.getenv("MRAN_DATE")))' > .binder/runtime.txt
           git config user.email "<>"
           git config user.name "GitHub runner"
