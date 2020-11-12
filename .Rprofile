@@ -1,5 +1,5 @@
 # read mran snapshot from binder configuration
-con <- file(".binder/runtime.txt")
+con <- file("DESCRIPTION")
 str <- readLines(con, 1)
 close(con)
 tmp <- regexpr("[0-9]{4}-[0-9]{2}-[0-9]{2}", str)

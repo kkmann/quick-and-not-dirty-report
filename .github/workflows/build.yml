@@ -14,38 +14,41 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - run: echo "${{ github.event_name }}"
         
       - name: check-out
         uses: actions/checkout@v2
+        
+      - name: set-r-vresion
+        run: echo "R_VERSION=$(grep -oP "(?<=R \\(== )[3-9]\\.[0-9]\\.[0-9]" DESCRIPTION)" >> $GITHUB_ENV
     
-      - name: install-r
+      - name: setup-r
         uses: r-lib/actions/setup-r@v1
-      
-      - name: query-r-version
+        with:
+             r-version: $R_VERSION
+ 
+      - run: echo "${{ steps.cache-r-packages.outputs.cache-hit }}"
+   
+      - name: setup-system-dependencies
+        if: runner.os == 'Linux'
         run: |
-          install.packages('remotes')
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-      
-      - run: cat .github/R-version'
-  
-      - name: install-pandoc
-        uses: r-lib/actions/setup-pandoc@v1
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'install-packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
       
       - name: cache-r-packages
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-${{ hashFiles('.binder/*') }}
-      
-      - run: echo "${{ steps.cache-r-packages.outputs.cache-hit }}"
-      
-      - name: setup
-        if: steps.cache-r-packages.outputs.cache-hit != 'true'
-        run: make setup
+          key: ${{ runner.os }}-$R_VERSION-${{ hashFiles('DESCRIPTION') }}
+          
+      - name: setup-packages
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
       
       - run: make build
       
