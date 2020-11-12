@@ -35,7 +35,7 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'install-packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+          done < <(Rscript -e 'install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
       
       - name: cache-r-packages
         uses: actions/cache@v1
