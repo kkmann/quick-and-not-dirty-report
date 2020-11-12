@@ -33,12 +33,12 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ steps.install-r.outputs.installed-r-version }}-${{ hashFiles('.binder/*') }}
+          key: ${{ runner.os }}-${{ jobs.build.steps.install-r.outputs.installed-r-version }}-${{ hashFiles('.binder/*') }}
       
-      - run: echo ${{ steps.cache-r-packages.outputs.cache-hit }}
+      - run: echo ${{ jobs.build.steps.cache-r-packages.outputs.cache-hit }}
       
       - name: setup
-        if: steps.cache-r-packages.outputs.cache-hit != 'true'
+        if: jobs.build.steps.cache-r-packages.outputs.cache-hit != 'true'
         run: make setup
       
       - run: make build
