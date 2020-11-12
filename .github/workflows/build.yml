@@ -48,8 +48,9 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       
-      - name: setup-pandoc
-        uses: r-lib/actions/setup-pandoc
+      - uses: r-lib/actions/setup-pandoc@v1
+        with:
+          pandoc-version: '2.7.3'
       
       - run: make build
       
