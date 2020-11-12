@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 ```
 
 The R Markdown source for this report is available to explore in an interactive 
-RStudio session at [[your binder link]](https://mybinder.org/v2/gh/kkmann/explainR-template/HEAD?urlpath=rstudio).
+RStudio session at [[your binder link]](https://mybinder.org/v2/gh/kkmann/quick-and-not-dirty-report/HEAD?urlpath=rstudio).
 
 
 # R Markdown
