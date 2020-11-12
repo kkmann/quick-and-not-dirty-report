@@ -20,28 +20,23 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: check out
+        uses: actions/checkout@v2
+    
+      - name: install R
+        uses: r-lib/actions/setup-r@v1
+  
+      - name: install pandoc
+        uses: r-lib/actions/setup-pandoc@v1
       
-      # install current R
-      - uses: r-lib/actions/setup-r@v1
+      - name: cache R packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ steps.install R.outputs.installed-r-version }}-${{ hashFiles('.binder/*') }}
       
-      # install pandoc
-      - uses: r-lib/actions/setup-pandoc@v1
-      
-      # setup packages
       - run: make setup
       
-      # build site
       - run: make build
       
       # deploy
