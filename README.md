@@ -2,7 +2,7 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 
-# A Template for Quick (interactive) R Reports
+# A Template for Quick, Reproducible & Interactive R Reports
 
 tl;dr: You want to host a simple website showcasing some R code and results but don't bother with setting up an entire blog? You want a polished and easily accessible presentation but also maximal reproducibility for readers who want to hack into the source code? This repository is a template for doing exactly that!
 
