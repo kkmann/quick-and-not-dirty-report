@@ -21,13 +21,13 @@ jobs:
       - name: check-out
         uses: actions/checkout@v2
         
-      - name: set-r-vresion
+      - name: set-r-version
         run: echo "R_VERSION=$(grep -oP "(?<=R \\(== )[3-9]\\.[0-9]\\.[0-9]" DESCRIPTION)" >> $GITHUB_ENV
     
       - name: setup-r
         uses: r-lib/actions/setup-r@v1
         with:
-             r-version: $R_VERSION
+             r-version: ${{ env.R_VERSION }}
    
       - name: setup-system-dependencies
         if: runner.os == 'Linux'
