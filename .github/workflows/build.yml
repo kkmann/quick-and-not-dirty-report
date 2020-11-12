@@ -19,8 +19,10 @@ jobs:
       - name: check-out
         uses: actions/checkout@v2
         
-      - name: set-r-version
-        run: echo "R_VERSION=$(grep -oP "(?<=R \\(== )[3-9]\\.[0-9]\\.[0-9]" DESCRIPTION)" >> $GITHUB_ENV
+      - name: parse-versions-and-date
+        run: echo 'R_VERSION=$(grep -oP "(?<=R \\(== )[3-9]\\.[0-9]\\.[0-9]" DESCRIPTION)' >> $GITHUB_ENV
+        run: echo 'R_VERSION_BINDER=$(grep -oP "(?<=R \\(== )3\.[0-6]" DESCRIPTION)' >> $GITHUB_ENV # uses default otherwise
+        run: echo 'MRAN_DATE=$(grep -oP "(?<=Date: )[0-9]{4}-[0-9]{2}-[0-9]{2}" DESCRIPTION)' >> $GITHUB_ENV # uses default otherwise
     
       - name: setup-r
         uses: r-lib/actions/setup-r@v1
@@ -32,17 +34,18 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+          done < <(Rscript -e 'options(repos = c(CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", Sys.getenv("MRAN_DATE")))); install.packages("remotes"); writeLines(remotes::system_requirements("ubuntu", "20.04"))')
       
       - name: update-binder-specification
         if: github.event_name == 'push'
         run: |
-          Rscript -e 'writeLines(gsub("^apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04"), perl = TRUE))' > apt.txt
+          Rscript -e 'writeLines(gsub("^apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04"), perl = TRUE))' > .binder/apt.txt
+          Rscript -e 'writeLines(sprintf("r-%s-%s", Sys.getenv("R_VERSION_BINDER", unset = "3.6"), Sys.getenv("MRAN_DATE")))' > .binder/runtime.txt
           git config user.email "<>"
           git config user.name "GitHub runner"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
-          git add apt.txt
-          git diff-index --quiet HEAD || git commit -m "automatically updated binder system dependencies"
+          git add .binder/*
+          git diff-index --quiet HEAD || git commit -m "automatically updated binder specifications"
           git push origin main
       
       - name: cache-r-packages
@@ -53,12 +56,7 @@ jobs:
           
       - name: setup-packages
         run: |
-          con <- file("runtime.txt"); str <- readLines(con, 1); close(con)
-          tmp <- regexpr("[0-9]{4}-[0-9]{2}-[0-9]{2}", str)
-          mran_date <- substr(str, start = tmp, stop = tmp + attr(tmp, "match.length"))
-          options(repos = c( 
-            CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", mran_date)
-          ))
+          options(repos = c(CRAN = sprintf("https://mran.revolutionanalytics.com/snapshot/%s", Sys.getenv("MRAN_DATE"))))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       

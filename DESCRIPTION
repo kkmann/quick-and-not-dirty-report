@@ -1,5 +1,5 @@
-Depends:
-    R (== 4.0.3),
+Date: 2020-11-01
+Depends: R (== 3.6.3),
     tidyverse,
     rmarkdown,
     knitr,
