@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: "${{ runner.os }}-$R_VERSION-${{ hashFiles('DESCRIPTION') }}"
+          key: ${{ runner.os }}-${{ env.R_VERSION }}-${{ hashFiles('DESCRIPTION') }}"
           
       - name: setup-packages
         run: |
