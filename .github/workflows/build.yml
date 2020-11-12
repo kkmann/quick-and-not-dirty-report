@@ -35,6 +35,8 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ steps.install-r.outputs.installed-r-version }}-${{ hashFiles('.binder/*') }}
       
+      - run: echo ${{ steps.cache-r-packages.outputs.cache-hit }}
+      
       - name: setup
         if: steps.cache-r-packages.outputs.cache-hit != 'true'
         run: make setup
@@ -43,6 +45,7 @@ jobs:
       
       # deploy
       - uses: JamesIves/github-pages-deploy-action@3.7.1
+        if: github.event_name == 'push'
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
