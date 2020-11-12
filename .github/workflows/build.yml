@@ -28,8 +28,6 @@ jobs:
         uses: r-lib/actions/setup-r@v1
         with:
              r-version: $R_VERSION
- 
-      - run: echo "${{ steps.cache-r-packages.outputs.cache-hit }}"
    
       - name: setup-system-dependencies
         if: runner.os == 'Linux'
@@ -43,7 +41,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-$R_VERSION-${{ hashFiles('DESCRIPTION') }}
+          key: "${{ runner.os }}-$R_VERSION-${{ hashFiles('DESCRIPTION') }}"
           
       - name: setup-packages
         run: |

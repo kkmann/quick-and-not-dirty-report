@@ -1,0 +1,8 @@
+Date: 2020-11-01
+Author: whom to complain to
+Depends:
+    R (== 4.0.3),
+    tidyverse,
+    knitr,
+    pander,
+    DT
