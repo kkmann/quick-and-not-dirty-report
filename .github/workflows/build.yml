@@ -42,7 +42,7 @@ jobs:
           git config user.name "GitHub runner"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
           git add apt.txt
-          git commit -m "automatically updated binder system dependencies"
+          git diff-index --quiet HEAD || git commit -m "automatically updated binder system dependencies"
           git push origin main
       
       - name: cache-r-packages
