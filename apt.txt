@@ -4,9 +4,3 @@ libcurl4-openssl-dev
 libssl-dev
 pandoc
 libxml2-dev
-libicu-dev
-make
-libcurl4-openssl-dev
-libssl-dev
-pandoc
-libxml2-dev
