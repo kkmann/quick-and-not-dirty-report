@@ -1,4 +1,4 @@
-all:
+build:
 	mkdir .build
 	Rscript -e 'rmarkdown::render("rmarkdown/page.Rmd", output_dir = ".build")'
 
@@ -7,6 +7,3 @@ setup:
 	
 clean:
 	rm -rf .build
-	
-deploy:
-	
