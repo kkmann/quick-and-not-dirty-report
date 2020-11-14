@@ -29,5 +29,5 @@ discussion forum (github issues!) ;)
 
 ## Example
 
-To see the template report in action, head over to <https://kkmann.github.io/kkmann/quick-and-not-dirty-report>. The interactive version is available at <https://mybinder.org/v2/gh/kkmann/quick-and-not-dirty-report/HEAD?urlpath=rstudio>.
+To see the template report in action, head over to <https://kkmann.github.io/quick-and-not-dirty-report/>. The interactive version is available at <https://mybinder.org/v2/gh/kkmann/quick-and-not-dirty-report/HEAD?urlpath=rstudio>.
 
